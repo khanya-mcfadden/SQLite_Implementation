@@ -72,44 +72,44 @@ p {
 }
 
 /* Table Styling */
-.productList {
+.tableDisplay {
   overflow-x: auto; /* Allow horizontal scrolling on small screens */
   margin: 2em 0;
 }
 
-.productList table {
+.tableDisplay table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1em;
 }
 
-.productList th,
-.productList td {
+.tableDisplay th,
+.tableDisplay td {
   padding: 1em;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
-.productList th {
+.tableDisplay th {
   background-color: #3e2723; /* Dark Coffee Brown */
   color: #fff; /* White */
   font-weight: bold;
 }
 
-.productList tr:nth-child(even) {
+.tableDisplay tr:nth-child(even) {
   background-color: #f5f5f5;
 }
 
-.productList tr:hover {
+.tableDisplay tr:hover {
   background-color: #ddd;
 }
 
-.productList td {
+.tableDisplay td {
   color: #3e2723;
 }
 
 /* Add some spacing around the table within the div */
-.productList {
+.tableDisplay {
   padding: 1em;
   background-color: #fff;
   border-radius: 5px;

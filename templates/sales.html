@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block title %}Products{% endblock %} {% block
+content %}
+<h1>Sales</h1>
+<h3>
+  List of customer sales
+</h3>
+<div class="tableDisplay">
+  <table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Customer</th>
+            <th>Quantity</th>
+            <th>Sale Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales %}
+        <tr>
+            <td>{{ sale[1] }}</td>
+            <td>{{ sale[2] }}</td>
+            <td>{{ sale[3] }}</td>
+            <td>{{ sale[4] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
