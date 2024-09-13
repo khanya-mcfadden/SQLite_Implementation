@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 
-{% extends "base.html" %}
-
-{% block title %}About{% endblock %}
-
-{% block content %}
-<h1>About</h1>
-<p>Here is some information about the company...</p>
+{% extends "base.html" %} {% block title %}Products{% endblock %} {% block
+content %}
+<h1>Products</h1>
+<h3>
+    customer purchases.
+</h3>
+<div class="customerList">
+  <table border="1">
+    <thead>
+      <tr>
+        <th>usesrname</th>
+        <th>email</th>
+        <th>first name</th>
+        <th>last name</th>
+        <th>address</th>
+        <th>phone number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customer %}
+      <tr>
+        <td>{{ customer[1] }}</td>
+        <td>{{ customer[2] }}</td>
+        <td>{{ customer[3] }}</td>
+        <td>{{ customer[4] }}</td>
+        <td>{{ customer[5] }}</td>
+        <td>{{ customer[6] }}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
