@@ -32,6 +32,19 @@ def getProducts(): #Query our table to retrieve all of our products
     print(products)
     return products
 
+def getsales(): #Query our table to retrieve all of our products
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM sale")
+        products = cursor.fetchall() #fetchone() vs fetchall() depending on the situation. We want all of the data here.
+    except sqlite3.Error as error:
+        print("Database error:", error)
+    finally: #finally will always run after both a try and except. In other words: no matter if successful or not, this code will run.
+        cursor.close()
+        
+    print(sale)
+    return sale
+
 #Starting (index) page & /home page are the same Note: You can use multiple routes attached to one function.
 @app.route('/')
 @app.route('/home')
@@ -51,10 +64,12 @@ def booking():
 def products():
     products = getProducts()
     return render_template('products.html', products = products)
-@app.route('/sales')
+
+@app.route('/sales ')
 def sales():
-    return render_template('sales.html')
-    
+    sales = getSales()
+    return render_template('sales.html', sales = sales)
+
 #Run in debug mode.
 if __name__ == '__main__':
     app.run(debug = True)

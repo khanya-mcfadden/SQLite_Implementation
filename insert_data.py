@@ -7,3 +7,16 @@ cursor = connection.cursor()
 cursor.execute(query)
 connection.commit()  # Commit the transaction
 cursor.close()
+
+
+connection = sqlite3.connect('sales.db', check_same_thread=False) #Will create DB if it doesn't already exist
+
+query = """CREATE TABLE IF NOT EXISTS sales(sale id, name, cost ,total) values 
+    item name varchar(50) unique,
+    num of sale varchar(100),
+    cost per item varchar(50),
+    total cost varchar(50)
+);""" 
+cursor = connection.cursor()
+cursor.execute(query)
+cursor.close()
