@@ -10,7 +10,7 @@ cursor.close()
 
 
 connection = sqlite3.connect('sale.db', check_same_thread=False) #Will create DB if it doesn't already exist
-query = """INSERT INTO sale (product id, customer id, date, timke) VALUES ('',);"""
+query = """INSERT INTO sale (product id, customer id, date, time) VALUES ('1','1','20/12/2024', '16:00');"""
 cursor = connection.cursor()
 cursor.execute(query)
 connection.commit()  # Commit the transaction
