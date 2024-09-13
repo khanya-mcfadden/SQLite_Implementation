@@ -1,4 +1,4 @@
-from flask import Flask, render_template #Flask library and functions
+from flask import Flask, render_template, redirect, render_template, request #Flask library and functions
 import sqlite3 #Our database
 import datetime #Used to display current date & time
 
@@ -8,11 +8,23 @@ app = Flask(__name__)
 #Connection to DB
 connection = sqlite3.connect('BeanBrew.db', check_same_thread=False) #Will create DB if it doesn't already exist
 
-#Set up table if it doesn't exist already
+# Set up product table if it doesn't exist already
 query = """CREATE TABLE IF NOT EXISTS product(id INTEGER PRIMARY KEY, productName TEXT NOT NULL, productDescription TEXT NOT NULL, price REAL NOT NULL);"""
 cursor = connection.cursor()
 cursor.execute(query)
-cursor.close() #Important to make sure we close the cursor when we are done with it.
+cursor.close()
+
+# Add Customers Table
+query = """CREATE TABLE IF NOT EXISTS customer(CustomerID INTEGER PRIMARY KEY, firstName TEXT NOT NULL, lastName TEXT NOT NULL, email TEXT NOT NULL, Phone TEXT NOT NULL);"""
+cursor = connection.cursor()
+cursor.execute(query)
+cursor.close()
+
+# Add Sales Table
+query = """CREATE TABLE IF NOT EXISTS sale(id INTEGER PRIMARY KEY, productID INTEGER NOT NULL, customerID INTEGER NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(customerID) REFERENCES customer(id));"""
+cursor = connection.cursor()
+cursor.execute(query)
+cursor.close()
 
 def getCurrentDateTime():
     date = datetime.datetime.now().date()
@@ -32,18 +44,25 @@ def getProducts(): #Query our table to retrieve all of our products
     print(products)
     return products
 
-def getsales(): #Query our table to retrieve all of our products
+def joinTables():
+    sales = None
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM sale")
-        products = cursor.fetchall() #fetchone() vs fetchall() depending on the situation. We want all of the data here.
+        cursor.execute("""
+            SELECT Sale.id, Product.productName, Product.productDescription, Product.price,
+                   Customer.firstName, Customer.lastName, Customer.email, Customer.Phone, 
+                   Sale.date, Sale.time
+            FROM Sale
+            JOIN Product ON Sale.productID = Product.id
+            JOIN Customer ON Sale.customerID = Customer.rowid
+        """)
+        sales = cursor.fetchall()
+        print(f"Retrieved {len(sales)} sales records")  # Add this line
     except sqlite3.Error as error:
         print("Database error:", error)
-    finally: #finally will always run after both a try and except. In other words: no matter if successful or not, this code will run.
+    finally:
         cursor.close()
-        
-    print(sale)
-    return sale
+    return sales
 
 #Starting (index) page & /home page are the same Note: You can use multiple routes attached to one function.
 @app.route('/')
@@ -60,15 +79,28 @@ def about():
 def booking():
     return render_template('booking.html')
 
+@app.route('/edit_records')
+def edit_records():
+        if request.method == "POST":
+
+            table_name = request.form["table"]
+
+            
+
+
+        if request.method == "GET":
+          return render_template('edit_records.html')
+
 @app.route('/products')
 def products():
     products = getProducts()
     return render_template('products.html', products = products)
 
-@app.route('/sales ')
+@app.route('/sales')
 def sales():
-    sales = getSales()
-    return render_template('sales.html', sales = sales)
+    sales = joinTables()
+    print(sales)  # Add this line to check the contents
+    return render_template('sales.html', sales=sales)
 
 #Run in debug mode.
 if __name__ == '__main__':
