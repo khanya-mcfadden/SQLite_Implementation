@@ -51,7 +51,10 @@ def booking():
 def products():
     products = getProducts()
     return render_template('products.html', products = products)
-
+@app.route('/sales')
+def sales():
+    return render_template('sales.html')
+    
 #Run in debug mode.
 if __name__ == '__main__':
     app.run(debug = True)
