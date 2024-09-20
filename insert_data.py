@@ -22,7 +22,7 @@ def generate_random_sale():
     time = fake.time(pattern="%H:%M")
     return (product_id, customer_id, date, time)
 
-for _ in range(5):
+for _ in range(200):
     # Insert random customer data
     random_customer = generate_random_customer()
     query = """INSERT INTO customer (FirstName, LastName, email, Phone) VALUES (?, ?, ?, ?);"""
