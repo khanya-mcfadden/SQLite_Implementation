@@ -124,7 +124,7 @@ def products():
 @app.route('/sales')
 def sales():
     sales = joinTables()
-    print(sales)  
+    print(sales)
     return render_template('sales.html', sales=sales)
 
 

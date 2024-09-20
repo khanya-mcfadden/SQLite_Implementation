@@ -11,8 +11,7 @@ connection = sqlite3.connect('BeanBrew.db', check_same_thread=False) #Will creat
 def generate_random_customer():
     first_name = fake.first_name()
     last_name = fake.last_name()
-    email_domain = fake.random_element(elements=["gmail.com", "yahoo.com", "business.com"])
-    email = fake.email().split('@')[0] + '@' + email_domain
+    email = fake.email().split('@')[0] + '@example.com'
     phone = fake.phone_number()
     return (first_name, last_name, email, phone)
 
@@ -70,13 +69,13 @@ def generate_random_product():
             "Chicken Soup", "Tomato Soup", "Minestrone Soup", "Clam Chowder", "Broccoli Cheddar Soup", "French Onion Soup", "Lentil Soup", "Miso Soup", "Beef Stew", "Chicken Noodle Soup"
         ])
     
-    product_description = fake.sentences()
+    product_description = fake.sentence()
     price = round(random.uniform(1.0, 100.0), 2)
     return (product_name, product_description, price)
         
 
-
-for _ in range(200):
+ 
+for _ in range(10000):
     # Insert random customer data
     random_customer = generate_random_customer()
     query = """INSERT INTO customer (FirstName, LastName, email, Phone) VALUES (?, ?, ?, ?);"""
@@ -84,6 +83,7 @@ for _ in range(200):
     cursor.execute(query, random_customer)
     connection.commit()  # Commit the transaction
     cursor.close()
+
 
     # Insert random sale data
     random_sale = generate_random_sale()
@@ -93,10 +93,10 @@ for _ in range(200):
     connection.commit()  # Commit the transaction
     cursor.close()
     
-    # Insert random product data
-    random_product = generate_random_product()
-    query = """INSERT INTO product (productName, productDescription, price) VALUES (?, ?, ?);"""
-    cursor = connection.cursor()
-    cursor.execute(query, random_product)
-    connection.commit()  # Commit the transaction
-    cursor.close()
+    # # # Insert random product data
+    # random_product = generate_random_product()
+    # query = """INSERT INTO product (productName, productDescription, price) VALUES (?, ?, ?);"""
+    # cursor = connection.cursor()
+    # cursor.execute(query, random_product)
+    # connection.commit()  # Commit the transaction
+    # cursor.close()
