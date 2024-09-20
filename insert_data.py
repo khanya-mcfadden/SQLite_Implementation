@@ -21,6 +21,11 @@ def generate_random_sale():
     date = fake.date(pattern="%d/%m/%Y")
     time = fake.time(pattern="%H:%M")
     return (product_id, customer_id, date, time)
+def generate_random_product():
+    product_name = fake.word()
+    product_description = fake.sentence()
+    price = random.uniform(1.0, 100.0)
+    return (product_name, product_description, price)
 
 for _ in range(200):
     # Insert random customer data
@@ -36,5 +41,13 @@ for _ in range(200):
     query = """INSERT INTO sale (productId, customerId, date, time) VALUES (?, ?, ?, ?);"""
     cursor = connection.cursor()
     cursor.execute(query, random_sale)
+    connection.commit()  # Commit the transaction
+    cursor.close()
+    
+    # Insert random product data
+    random_product = generate_random_product()
+    query = """INSERT INTO product (productName, productDescription, price) VALUES (?, ?, ?);"""
+    cursor = connection.cursor()
+    cursor.execute(query, random_product)
     connection.commit()  # Commit the transaction
     cursor.close()
