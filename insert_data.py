@@ -21,6 +21,7 @@ def generate_random_sale():
     date = fake.date(pattern="%d/%m/%Y")
     time = fake.time(pattern="%H:%M")
     return (product_id, customer_id, date, time)
+
 for _ in range(5):
     # Insert random customer data
     random_customer = generate_random_customer()
@@ -37,10 +38,3 @@ for _ in range(5):
     cursor.execute(query, random_sale)
     connection.commit()  # Commit the transaction
     cursor.close()
-
-connection = sqlite3.connect('BeanBrew.db', check_same_thread=False) #Will create DB if it doesn't already exist
-query = """INSERT INTO sale (productId, customerId, date, time) VALUES ('4','1','20/12/2024', '16:00');"""
-cursor = connection.cursor()
-cursor.execute(query)
-connection.commit()  # Commit the transaction
-cursor.close()
