@@ -1,26 +1,20 @@
-from flask import Flask, render_template, redirect, render_template, request #Flask library and functions
-import sqlite3 #Our database
-import datetime #Used to display current date & time
+from flask import Flask, render_template, redirect, render_template, request 
+import sqlite3 
+import datetime 
 
-#Instantiate Flask App
 app = Flask(__name__)
 
-#Connection to DB
-connection = sqlite3.connect('BeanBrew.db', check_same_thread=False) #Will create DB if it doesn't already exist
-
-# Set up product table if it doesn't exist already
+connection = sqlite3.connect('BeanBrew.db', check_same_thread=False) 
 query = """CREATE TABLE IF NOT EXISTS product(id INTEGER PRIMARY KEY, productName TEXT NOT NULL, productDescription TEXT NOT NULL, price REAL NOT NULL);"""
 cursor = connection.cursor()
 cursor.execute(query)
 cursor.close()
 
-# Add Customers Table
 query = """CREATE TABLE IF NOT EXISTS customer(CustomerID INTEGER PRIMARY KEY, firstName TEXT NOT NULL, lastName TEXT NOT NULL, email TEXT NOT NULL, Phone TEXT NOT NULL);"""
 cursor = connection.cursor()
 cursor.execute(query)
 cursor.close()
 
-# Add Sales Table
 query = """CREATE TABLE IF NOT EXISTS sale(id INTEGER PRIMARY KEY, productID INTEGER NOT NULL, customerID INTEGER NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(customerID) REFERENCES customer(id));"""
 cursor = connection.cursor()
 cursor.execute(query)
@@ -29,16 +23,16 @@ cursor.close()
 def getCurrentDateTime():
     date = datetime.datetime.now().date()
     time = datetime.datetime.now().time()
-    return date.strftime("%d/%m/%Y"), time.strftime("%X") #Format the date and time correctly before returning.
+    return date.strftime("%d/%m/%Y"), time.strftime("%X") 
 
-def getProducts(): #Query our table to retrieve all of our products
+def getProducts(): 
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM Product")
-        products = cursor.fetchall() #fetchone() vs fetchall() depending on the situation. We want all of the data here.
+        products = cursor.fetchall() 
     except sqlite3.Error as error:
         print("Database error:", error)
-    finally: #finally will always run after both a try and except. In other words: no matter if successful or not, this code will run.
+    finally: 
         cursor.close()
         
     print(products)
@@ -57,14 +51,13 @@ def joinTables():
             JOIN Customer ON Sale.customerID = Customer.rowid
         """)
         sales = cursor.fetchall()
-        print(f"Retrieved {len(sales)} sales records")  # Add this line
+        print(f"Retrieved {len(sales)} sales records") 
     except sqlite3.Error as error:
         print("Database error:", error)
     finally:
         cursor.close()
     return sales
 
-#Starting (index) page & /home page are the same Note: You can use multiple routes attached to one function.
 @app.route('/')
 @app.route('/home')
 def home():
@@ -79,13 +72,45 @@ def about():
 def booking():
     return render_template('booking.html')
 
-@app.route('/edit_records')
+@app.route('/add_records')
 def edit_records():
         if request.method == "POST":
 
-            table_name = request.form["table"]
+            record_type = request.form["record_type"]
 
-            
+            if record_type == "product":
+                product_name = request.form["product_name"]
+                product_description = request.form["product_description"]
+                product_price = request.form["product_price"]
+
+                cursor = connection.cursor()
+                cursor.execute("INSERT INTO Product (productName, productDescription, price) VALUES (?, ?, ?)", (product_name, product_description, product_price))
+                connection.commit()
+                cursor.close()
+
+            if record_type == "customer":
+                first_name = request.form["first_name"]
+                last_name = request.form["last_name"]
+                email = request.form["email"]
+                phone = request.form["phone"]
+
+                cursor = connection.cursor()
+                cursor.execute("INSERT INTO Customer (firstName, lastName, email, phone) VALUES (?, ?, ?, ?)", (first_name, last_name, email, phone))
+                connection.commit()
+                cursor.close()
+
+            if record_type == "sale":
+                product_id = request.form["product_id"]
+                customer_id = request.form["customer_id"]
+                date = request.form["date"]
+                time = request.form["time"]
+
+                cursor = connection.cursor()
+                cursor.execute("INSERT INTO Sale (productID, customerID, date, time) VALUES (?, ?, ?, ?)", (product_id, customer_id, date, time))
+                connection.commit()
+                cursor.close()
+
+            return redirect('/edit_records')
 
 
         if request.method == "GET":
@@ -99,9 +124,9 @@ def products():
 @app.route('/sales')
 def sales():
     sales = joinTables()
-    print(sales)  # Add this line to check the contents
+    print(sales)  
     return render_template('sales.html', sales=sales)
 
-#Run in debug mode.
+
 if __name__ == '__main__':
     app.run(debug = True)
