@@ -127,6 +127,10 @@ def sales():
     print(sales)
     return render_template('sales.html', sales=sales)
 
+@app.route('/add_product')
+def add_product():
+    return render_template('add_product.html')
+
 
 if __name__ == '__main__':
     app.run(debug = True)
