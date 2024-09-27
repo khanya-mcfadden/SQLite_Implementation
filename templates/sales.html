@@ -12,20 +12,22 @@
       <tr>
         <th>Order ID</th>
         <th>Product ID</th>
-         <th>Customer ID</th>
-        <th>Date</th>
-        <th>time</th>
+        <th>product description</th>
+        <th>cost</th>
+        <th>first name</th>
+        <th>last name</th>
+
       </tr>
     </thead>
     <tbody>
       {% for sales in sales %}
         <tr>
-          <td>{{ sale[0] }}</td>
-          <td>{{ sale[1] }}</td>
-          <td>{{ sale[2] }}</td>
-          <td>{{ sale[3] }}</td>
-          <td>{{ sale[4] }}</td>
-          <td>{{ sale[5] }}</td>
+          <td>{{ sales[0] }}</td>
+          <td>{{ sales[1] }}</td>
+          <td>{{ sales[2] }}</td>
+          <td>{{ sales[3] }}</td>
+          <td>{{ sales[4] }}</td>
+          <td>{{ sales[5] }}</td>
         </tr>
       {% endfor %}
     </tbody>

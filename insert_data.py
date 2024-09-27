@@ -17,7 +17,7 @@ def generate_random_customer():
 
 def generate_random_sale():
     product_id = random.randint(1, 10)  # Assuming product IDs range from 1 to 10
-    customer_id = random.randint(1, 10)  # Assuming customer IDs range from 1 to 10
+    customer_id = random.randint(1, 14,417)  # Assuming customer IDs range from 1 to 10
     date = fake.date(pattern="%d/%m/%Y")
     time = fake.time(pattern="%H:%M")
     return (product_id, customer_id, date, time)
@@ -93,10 +93,10 @@ for _ in range(10000):
     connection.commit()  # Commit the transaction
     cursor.close()
     
-    # # # Insert random product data
-    # random_product = generate_random_product()
-    # query = """INSERT INTO product (productName, productDescription, price) VALUES (?, ?, ?);"""
-    # cursor = connection.cursor()
-    # cursor.execute(query, random_product)
-    # connection.commit()  # Commit the transaction
-    # cursor.close()
+    # # Insert random product data
+    random_product = generate_random_product()
+    query = """INSERT INTO product (productName, productDescription, price) VALUES (?, ?, ?);"""
+    cursor = connection.cursor()
+    cursor.execute(query, random_product)
+    connection.commit()  # Commit the transaction
+    cursor.close()
